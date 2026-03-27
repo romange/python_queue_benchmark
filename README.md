@@ -20,9 +20,32 @@ The task queue libraries in this benchmark:
 
 ## Test Method
 
-The benchmark is very naive, it measure the total time spent on processing `20,000` jobs by `10` workers. Each job simply prints the current time.
+The benchmark measures the total time spent on processing `200,000` jobs by `10` workers across `10` queues. Each job simply prints the current time.
 
 All tests were conducted on a MacBook Pro 14 inch M2 Pro with 16GB of RAM.
+
+### Environment Variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `TOTAL_JOBS` | `200000` | Total number of jobs to enqueue |
+| `NUM_QUEUES` | `10` | Number of queues to distribute jobs across (named `queue_0`, `queue_1`, …) |
+
+Jobs are distributed round-robin across queues: job `i` goes to `queue_{i % NUM_QUEUES}`.
+
+### Memory Measurement
+
+After all jobs are enqueued (before any worker starts consuming), each `enqueue_jobs.py` prints Redis memory stats via the `INFO memory` command:
+
+```
+=== MEMORY AT PEAK (before consuming) ===
+  used_memory_human:      42.00M
+  used_memory_peak_human: 42.00M
+  used_memory_rss_human:  56.00M
+==========================================
+```
+
+This is implemented in `memory_stats.py` at the repo root and called from every `enqueue_jobs.py`. It enables measuring the memory impact of different serialization strategies (e.g. ZSTD dict compression) on realistic multi-queue workloads.
 
 ### Time to Enqueue 20,000 Jobs
 
