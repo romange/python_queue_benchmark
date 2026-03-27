@@ -83,10 +83,8 @@ source .venv/bin/activate
    ```
 3. Process jobs:
    ```bash
-   python -c "import time; print(f'Start time: {time.time()}')" > time.log && rq worker-pool -q -n 10
+   NUM_QUEUES=10 NUM_WORKERS=10 ./run_workers.sh
    ```
-4. Record the time when the last job finishes and note the start time in `time.log`.
-5. Calculate the difference.
 
 ### Results
 

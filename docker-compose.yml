@@ -1,6 +1,9 @@
 services:
   redis:
-    image: redis:7-alpine
+    # image: redis:7-alpine
+    # command: redis-server --save ""
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.37.2
+    command: dragonfly --pipeline_queue_limit=1000000 --dbfilename= --lock_on_hashtags --num_shards=1
     restart: always
     ports:
       - "6379:6379"
