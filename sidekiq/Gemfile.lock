@@ -1,0 +1,27 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    connection_pool (3.0.2)
+    json (2.19.3)
+    logger (1.7.0)
+    rack (3.2.5)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.28.0)
+      connection_pool
+    sidekiq (8.1.2)
+      connection_pool (>= 3.0.0)
+      json (>= 2.16.0)
+      logger (>= 1.7.0)
+      rack (>= 3.2.0)
+      redis-client (>= 0.26.0)
+
+PLATFORMS
+  x86_64-linux-gnu
+
+DEPENDENCIES
+  redis
+  sidekiq
+
+BUNDLED WITH
+   2.4.20
