@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-from tasks import load_test_job, broker
+from tasks import load_test_job
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from memory_stats import print_memory_stats
@@ -15,9 +15,7 @@ def enqueue_jobs():
     redis_conn = Redis()
     start_time = time.time()
     for i in range(total_jobs):
-        msg = load_test_job.message(i)
-        msg = msg.copy(queue_name=f"queue_{i % num_queues}")
-        broker.enqueue(msg)
+        load_test_job.apply_async(args=[i], queue=f"queue_{i % num_queues}")
     end_time = time.time()
     print("All jobs enqueued within: ", end_time - start_time, "seconds")
     print_memory_stats(redis_conn)

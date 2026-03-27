@@ -1,12 +1,12 @@
 import logging
 import os
-import sys
 import time
 from tasks import load_test_job
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from memory_stats import print_memory_stats
 
+<<<<<<< Updated upstream
+total_jobs = os.getenv("TOTAL_JOBS", 20000)
+=======
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(name)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -17,13 +17,16 @@ logging.getLogger("celery").setLevel(logging.DEBUG)
 total_jobs = int(os.getenv("TOTAL_JOBS", 200000))
 num_queues = int(os.getenv("NUM_QUEUES", 10))
 LOG_INTERVAL = 10000
+>>>>>>> Stashed changes
 
 
 def enqueue_jobs():
-    from redis import Redis
-    redis_conn = Redis()
     start_time = time.time()
     for i in range(total_jobs):
+<<<<<<< Updated upstream
+        print(f"Enqueuing job {i}")
+        load_test_job.delay(i)
+=======
         try:
             load_test_job.apply_async(args=[i], queue=f"queue_{i % num_queues}", ignore_result=True)
         except Exception as e:
@@ -32,9 +35,9 @@ def enqueue_jobs():
         if (i + 1) % LOG_INTERVAL == 0:
             elapsed = time.time() - start_time
             logger.info(f"Enqueued {i + 1}/{total_jobs} in {elapsed:.1f}s ({(i+1)/elapsed:.0f} jobs/sec)")
+>>>>>>> Stashed changes
     end_time = time.time()
     print("All jobs enqueued within: ", end_time - start_time, "seconds")
-    print_memory_stats(redis_conn)
 
 
 if __name__ == "__main__":
